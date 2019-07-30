@@ -6,10 +6,10 @@
 #' the full set of information available to a series. The series' link (or name) can be used in the function \code{\link{getSeriesData}}
 #' to fecth data.
 #'
-#' @param patternGroupLabel character string as regular expression. Only accepts character string or \code{NULL} (default option).
-#' If length is greater than 1, the first element is used. The default option (\code{NULL}) retrieves the details for all groups in the
+#' @param patternGroupLabel character string as regular expression. Only accepts character string or \code{NULL} (default).
+#' If length is greater than 1, the first element is used. \code{patternGroupLabel=NULL} retrieves the details for all groups in the
 #' API.
-#' @param patternSeriesLabel character string as regular expression. Only accepts character string or \code{NULL} (default option).
+#' @param patternSeriesLabel character string as regular expression. Only accepts character string or \code{NULL} (default).
 #' If length is greater than 1, the first element is used. If \code{NULL}, no pattern-matching is executed on the series' label.
 #' @param ... accepts the follwing extra arguments from \code{\link[base]{grep}}: \code{ignore.case}, \code{perl}, \code{fixed} and
 #' \code{useBytes}.
@@ -23,9 +23,9 @@
 #'     This results in a longer processing time. A progress bar tracks the retrieval process.
 #' @seealso \code{\link{getSeriesInfo}}, \code{\link[base]{grep}}
 #' @examples
-#' # get information of series whose groups matches "consumer price" and series' labels matches "seasonally"
 #'
-#' seriesInfo <- getSeriesInfo(patternGroupLabel = "(?i)consumer price", patternSeriesLabel = "(?i)seasonally") # returns series "Total CPI, (seasonally adjusted)" from group "CPI_MONTHLY"
+#' # returns series info
+#' seriesInfo <- getSeriesInfo(patternGroupLabel="(?i)consumer price", patternSeriesLabel="(?i)seasonally")
 
 getSeriesInfo <- function(patternGroupLabel=NULL,patternSeriesLabel=NULL,...){
 
@@ -74,7 +74,7 @@ getSeriesInfo <- function(patternGroupLabel=NULL,patternSeriesLabel=NULL,...){
 
     groups <- do.call(rbind, lapply(groups$groups, function(x) x$link))
 
-    pb <- txtProgressBar(min = 0, max = 100, initial = 0)
+    pb <- utils::txtProgressBar(min = 0, max = 100, initial = 0)
     seriesInfo <- vector(mode="list", length=length(groups))
     groupsLen <- length(groups)
     for(i in seq_along(groups)){
@@ -112,7 +112,6 @@ getSeriesInfo <- function(patternGroupLabel=NULL,patternSeriesLabel=NULL,...){
   # into matrix with links
   groups <- do.call(rbind, lapply(groups, function(x) x$link))
 
-  pb <- txtProgressBar(min = 0, max = 100, initial = 0)
   seriesInfo <- vector(mode="list", length=length(groups))
   groupsLen <- length(groups)
   for(i in seq_along(groups)){
@@ -120,7 +119,6 @@ getSeriesInfo <- function(patternGroupLabel=NULL,patternSeriesLabel=NULL,...){
     cat(sprintf("\rRetrieving series labels and names. This process may take a few minutes...%.2f%% completed...", (i/groupsLen) * 100))
     if(i == groupsLen) cat("\n")
   }
-  close(pb)
 
   m <- do.call(rbind, lapply(seriesInfo, function(x){
     len <- length(x[["groupDetails"]]$groupSeries)

@@ -7,11 +7,11 @@
 getSeriesInfo(patternGroupLabel = NULL, patternSeriesLabel = NULL, ...)
 }
 \arguments{
-\item{patternGroupLabel}{character string as regular expression. Only accepts character string or \code{NULL} (default option).
-If length is greater than 1, the first element is used. The default option (\code{NULL}) retrieves the details for all groups in the
+\item{patternGroupLabel}{character string as regular expression. Only accepts character string or \code{NULL} (default).
+If length is greater than 1, the first element is used. \code{patternGroupLabel=NULL} retrieves the details for all groups in the
 API.}
 
-\item{patternSeriesLabel}{character string as regular expression. Only accepts character string or \code{NULL} (default option).
+\item{patternSeriesLabel}{character string as regular expression. Only accepts character string or \code{NULL} (default).
 If length is greater than 1, the first element is used. If \code{NULL}, no pattern-matching is executed on the series' label.}
 
 \item{...}{accepts the follwing extra arguments from \code{\link[base]{grep}}: \code{ignore.case}, \code{perl}, \code{fixed} and
@@ -37,9 +37,9 @@ also a series' group name, group label, group description and series name.
     This results in a longer processing time. A progress bar tracks the retrieval process.
 }
 \examples{
-# get information of series whose groups matches "consumer price" and series' labels matches "seasonally"
 
-seriesInfo <- getSeriesInfo(patternGroupLabel = "(?i)consumer price", patternSeriesLabel = "(?i)seasonally") # returns series "Total CPI, (seasonally adjusted)" from group "CPI_MONTHLY"
+# returns series info
+seriesInfo <- getSeriesInfo(patternGroupLabel="(?i)consumer price", patternSeriesLabel="(?i)seasonally")
 }
 \seealso{
 \code{\link{getSeriesInfo}}, \code{\link[base]{grep}}

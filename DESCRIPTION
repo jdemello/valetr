@@ -1,6 +1,6 @@
 Package: valetr
 Version: 0.0.0.9000
-Title: R interface to Bank of Canada's Valet API.
+Title: R interface to Bank of Canada's Valet API
 Authors@R: person("José", "de Mello", role=c("aut", "cre"), email="zedemellonetto@gmail.com")
 Depends: R (>= 3.1.0)
 Imports: jsonlite (>= 0.9)

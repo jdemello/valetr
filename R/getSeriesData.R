@@ -50,11 +50,11 @@
 #'
 #' @examples
 #'
-#' ### step 1: find the series link or name (in case you don't know yet)
-#' # get information of series whose groups matches "consumer price" and series' labels matches "seasonally"
+#' ### step 1: find the series link or name
+#' # get series info
 #' seriesInfo <- getSeriesInfo(patternGroupLabel = "(?i)consumer price", patternSeriesLabel = "(?i)seasonally")
 #'
-#' # use the link from the resulting object to get series obs
+#' # use link from resulting object to get series obs
 #' series <- getSeriesData(seriesInfo[["series_link"]])
 #'
 #' #### query example ####
