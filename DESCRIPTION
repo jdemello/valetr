@@ -1,0 +1,15 @@
+Package: valetr
+Version: 0.0.0.9000
+Title: R interface to Bank of Canada's Valet API.
+Authors@R: person("José", "de Mello", role=c("aut", "cre"), email="zedemellonetto@gmail.com")
+Depends: R (>= 3.1.0)
+Imports: jsonlite (>= 0.9)
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
+Maintainer: José de Mello <zedemellonetto@gmail.com>
+Description: This package provides an R interface to Bank of Canada's Valet API (\href{https://www.bankofcanada.ca/valet/docs}{https://www.bankofcanada.ca/valet/docs}). The Valet API allows users to retrive financial data from the Bank of Canada. Please read the Terms and Conditions for the API: \href{https://www.bankofcanada.ca/terms/}{https://www.bankofcanada.ca/terms/}.
+License: GPL-3
+URL: https://github.com/jdemello/valetr
+BugReports: https://github.com/jdemello/valetr/issues
+Encoding: UTF-8
+RoxygenNote: 6.1.1
