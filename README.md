@@ -7,6 +7,10 @@ condtions](https://www.bankofcanada.ca/terms/). Some of the data
 available include key monetary policy variables —Total CPI and M
 aggregates.
 
+Valet also provides a route to Foreign Exchange Rates in RSS. This route
+returns the **most recent** foreign exchange rate —one observation only.
+Therefore, it has little application for this package.
+
 ## Installation
 
 `valetr` has yet to be submitted to CRAN.
