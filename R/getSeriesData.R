@@ -52,14 +52,16 @@
 #'
 #' ### step 1: find the series link or name
 #' # get series info
-#' seriesInfo <- getSeriesInfo(patternGroupLabel = "(?i)consumer price", patternSeriesLabel = "(?i)seasonally")
+#' seriesInfo <- getSeriesInfo(patternGroupLabel="(?i)consumer price",
+#'                             patternSeriesLabel="(?i)seasonally")
 #'
 #' # use link from resulting object to get series obs
 #' series <- getSeriesData(seriesInfo[["series_link"]])
 #'
 #' #### query example ####
 #' # ex1: start and end date
-#' series <- getSeriesData(seriesInfo[["series_link"]], start_date="2010-01-01", end_date="2012-01-01")
+#' series <- getSeriesData(seriesInfo[["series_link"]],
+#'                         start_date="2010-01-01", end_date="2012-01-01")
 #'
 #' # ex2: the most recent 10 obs
 #' series <- getSeriesData(seriesInfo[["series_link"]], recent=10L)

@@ -25,7 +25,8 @@
 #' @examples
 #'
 #' # returns series info
-#' seriesInfo <- getSeriesInfo(patternGroupLabel="(?i)consumer price", patternSeriesLabel="(?i)seasonally")
+#' seriesInfo <- getSeriesInfo(patternGroupLabel="(?i)consumer price",
+#'                             patternSeriesLabel="(?i)seasonally")
 
 getSeriesInfo <- function(patternGroupLabel=NULL,patternSeriesLabel=NULL,...){
 

@@ -39,7 +39,8 @@ also a series' group name, group label, group description and series name.
 \examples{
 
 # returns series info
-seriesInfo <- getSeriesInfo(patternGroupLabel="(?i)consumer price", patternSeriesLabel="(?i)seasonally")
+seriesInfo <- getSeriesInfo(patternGroupLabel="(?i)consumer price",
+                            patternSeriesLabel="(?i)seasonally")
 }
 \seealso{
 \code{\link{getSeriesInfo}}, \code{\link[base]{grep}}
