@@ -8,7 +8,7 @@
 #' The default option returns a \code{data.frame} with all series with labels and links in the API.
 #' @param ... accepts the follwing extra arguments from \code{\link[base]{grep}}: \code{ignore.case}, \code{perl}, \code{fixed} and
 #' \code{useBytes}.
-#' @return An \eqn{n x 2} \code{data.frame} with columns representing labels and links respectively.
+#' @return A \code{data.frame}. Columns are the series label, link and name respectively.
 #' @seealso \code{\link{getSeriesInfo}}, \code{\link[base]{grep}}
 #' @examples
 #' # get a list of series that matches the pattern "CPI"
@@ -62,6 +62,7 @@ regexSeriesLabel <- function(pattern=NULL,...){
 
   # make it into data.frame
   series <- data.frame(series, stringsAsFactors = FALSE)
+  series[["name"]] <- regmatches(series[["link"]], regexpr(text=series[["link"]], pattern="[\\w\\_\\-\\s\\.]+$", perl = TRUE))
   rownames(series) <- NULL
 
   # subset list by pattern (if not NULL)

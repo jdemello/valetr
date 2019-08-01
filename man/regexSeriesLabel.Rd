@@ -14,7 +14,7 @@ The default option returns a \code{data.frame} with all series with labels and l
 \code{useBytes}.}
 }
 \value{
-An \eqn{n x 2} \code{data.frame} with columns representing labels and links respectively.
+A \code{data.frame}. Columns are the series label, link and name respectively.
 }
 \description{
 Exploratory function. If the pattern successfuly matches one or more series labels, then a

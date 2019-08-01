@@ -145,5 +145,6 @@ getSeriesInfo <- function(patternGroupLabel=NULL,patternSeriesLabel=NULL,...){
   # grepl(x=out[["series_label"]], pattern=patternSeriesLabel, ...)
   # out[grepl(x=out[["series_label"]], pattern=patternSeriesLabel, ...), ]
   out <- out[do.call("grep", append(list(pattern=patternSeriesLabel,x=out[["series_label"]]), dots)), ]
+  rownames(out) <- NULL
   return(out)
 }

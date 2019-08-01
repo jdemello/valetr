@@ -14,3 +14,7 @@
 
   return(dots[els[els %in% dotsnames]])
 }
+
+# drill down list matching a class attribute
+.drillDown <- function(x, classObj){
+  if (!inherits(x, classObj)) lapply(x, .drillDown, classObj) else TRUE}

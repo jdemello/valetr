@@ -27,8 +27,6 @@
 #'
 #' \strong{\code{...}}
 #'
-#'    \strong{**Note that the arguments passed on \code{...} apply to all series passed on \code{series}**}
-#'
 #'    The following arguments are accepted in \code{...}: \code{start_date}, \code{end_date},
 #'    \code{recent}, \code{recent_weeks}, \code{recent_months}, \code{recent_years}. These are
 #'    the API's options for time subsetting (see \href{https://www.bankofcanada.ca/valet/docs#observations_by_series}{API documentation}).
@@ -133,7 +131,7 @@ getSeriesData <- function(series, ...){
 
   if(length(urlError) != 0){
     if(length(urlError) == length(series)) stop("Page(s) unavailable. Check the series' name(s).")
-    errorUrlMsg <- paste0(urlError," - error msg: ", sapply(seriesObs[errorInd], function(x) x$message))
+    errorUrlMsg <- paste0(urlError," - error msg: ", sapply(seriesObs[errorInd], function(x) x[["message"]]))
     msg <- paste0("Following page(s) unavailable:\n\n", paste0(errorUrlMsg, collapse="\n\n"),
                   "\n\n",
                   "Removing the series above from the final output.")
@@ -147,23 +145,33 @@ getSeriesData <- function(series, ...){
 
   # assemble output into dframe
   out <- lapply(seriesObs, function(x){
-    if(length(x$observations)>0){
-      d <- data.frame(series_name = names(x$seriesDetail),
-                      series_label=unlist(x$seriesDetail)[[1]],
-                      series_desc=unlist(x$seriesDetail)[[2]],
-                      x$observations, stringsAsFactors = FALSE)
-      names(d)[length(d)] <- "v"
+    # list component with observations
+    obs <- x[["observations"]]
+    if(length(obs)>0){
+      # find date and value columns
+      cols <- names(unlist(.drillDown(obs, "character"))) # vectors must be character, else drill down
+
+      els <- strsplit(cols, "\\.") # list with vectors of drill down path
+
+      dObs <- do.call(cbind, lapply(els, function(x) obs[[x]])) # n x m matrix -input to final frame
+
+      colnames(dObs) <- cols
+
+      d <- data.frame(series_name = names(x[["seriesDetail"]]),
+                      series_label=unlist(x[["seriesDetail"]])[[1]],
+                      series_desc=unlist(x[["seriesDetail"]])[[2]],
+                      dObs, stringsAsFactors = FALSE)
     }else{
-      d <- data.frame(series_name = names(x$seriesDetail),
-                      series_label=unlist(x$seriesDetail)[[1]],
-                      series_desc=unlist(x$seriesDetail)[[2]],
+      d <- data.frame(series_name = names(x[["seriesDetail"]]),
+                      series_label=unlist(x[["seriesDetail"]])[[1]],
+                      series_desc=unlist(x[["seriesDetail"]])[[2]],
                       stringsAsFactors = FALSE)
     }
     return(d)
   })
 
   # name objects in lists with series name
-  names(out) <- sapply(seriesObs, function(x) names(x$seriesDetail))
+  names(out) <- sapply(seriesObs, function(x) names(x[["seriesDetail"]]))
 
   return(out)
 }

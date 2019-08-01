@@ -35,8 +35,6 @@ function accepts query arguments as specified on the
 
 \strong{\code{...}}
 
-   \strong{**Note that the arguments passed on \code{...} apply to all series passed on \code{series}**}
-
    The following arguments are accepted in \code{...}: \code{start_date}, \code{end_date},
    \code{recent}, \code{recent_weeks}, \code{recent_months}, \code{recent_years}. These are
    the API's options for time subsetting (see \href{https://www.bankofcanada.ca/valet/docs#observations_by_series}{API documentation}).
