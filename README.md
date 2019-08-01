@@ -9,7 +9,7 @@ M aggregates.
 
 Valet also provides a route to Foreign Exchange Rates in RSS. This route
 returns the **most recent** foreign exchange rate —one observation only.
-Therefore, it has little application for this package.
+This functionality is not included in `valetr`.
 
 ## Retrieve key monetary policy variables
 
