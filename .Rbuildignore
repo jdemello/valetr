@@ -3,5 +3,5 @@
 ^README\.Rmd$
 ^sandbox$
 gz$
-.gitignore
+gitignore$
 .Rhistory
