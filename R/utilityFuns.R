@@ -1,4 +1,4 @@
-# ancillary funs - find pattern in groups list labels, returns a matrix with link of group
+#' @export
 .searchGroupLabel <- function(groups,pattern,dots){
 
   indices <- which(sapply(groups[["groups"]], function(x) do.call("grepl", append(list(pattern=pattern, x=x[["label"]]), dots))),
@@ -7,6 +7,7 @@
   return(groups[["groups"]][indices])
 }
 
+#' @export
 .dotsHierarchy <- function(dots, dotsnames, validArgs){
   els <- validArgs
 
@@ -15,6 +16,6 @@
   return(dots[els[els %in% dotsnames]])
 }
 
-# drill down list matching a class attribute
+#' @export
 .drillDown <- function(x, classObj){
   if (!inherits(x, classObj)) lapply(x, .drillDown, classObj) else TRUE}

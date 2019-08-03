@@ -17,67 +17,19 @@ knitr::opts_chunk$set(
 library(valetr)
 ```
 
-The `valetr` package provides an R-native interface to [Bank of Canada’s
+The `valetr` package provides an R interface to the [Bank of Canada’s
 Valet API](https://www.bankofcanada.ca/valet/docs) —read the API's [terms and
 condtions](https://www.bankofcanada.ca/terms/). Some of the data
 available include key monetary policy variables —i.e. Total CPI and M
 aggregates.
 
-Valet also provides a route to Foreign Exchange Rates in RSS. This route returns the **most recent** foreign exchange rate —one observation only. This functionality is not included in `valter`.
+The Valet API also provides a route to Foreign Exchange Rates in RSS. This route returns the **most recent** foreign exchange rate —one observation only. This functionality is not included in `valter` for now.
 
-## Retrieve key monetary policy variables
-
-The Valet API houses key monetary policy variables series. For instance, it is possible to extract the series for some measures of core inflation:
-
-```{r eval=FALSE}
-# getSeriesInfo will return a data.frame with the series info (including link and name)
-cpiInfo <- getSeriesInfo(patternGroupLabel = "consumer price index$",
-              patternSeriesLabel = "trim|median|common|total cpi$",  
-                ignore.case=TRUE)
-
-# now use the series'  link or name to feed getSerieData
-# note that getSeriesData accepts multilpe links or names
-cpis <- getSeriesData(series=cpiInfo[["series_link"]]) # can also use cpiInfo[["series_name"]]
-```
-
-Note that `getSeriesData()` allows for the API's query functionality:
-
-```{r eval=FALSE}
-cpis <- getSeriesData(series=cpiInfo[["series_link"]], start_date="2008-07-01", end_date="2012-07-01")
-# cpis <- getSeriesData(series=cpiInfo[["series_link"]], recent_years=12L) # last 12 yrs
-# cpis <- getSeriesData(series=cpiInfo[["series_link"]], recent_months=12L) # last 12 months
-# cpis <- getSeriesData(series=cpiInfo[["series_link"]], recent_weeks=12L) # last 12 weeks
-# cpis <- getSeriesData(series=cpiInfo[["series_link"]], recent=12L) # last 12 obs
-```
-
-Note that only `start_date` and `end_date` can be used together as query parameters.
-
-## Obtain exchange rate series
-
-You can also retrieve foreign exchange rate series:
-
-```{r eval=FALSE}
-fxInfo <- getSeriesInfo(patternGroupLabel = "monthly exchange",
-              patternSeriesLabel = "(EUR|GBP|USD)\\/CAD",  
-                ignore.case=TRUE)
-
-# now use the series'  link or name to feed getSerieData
-# note that getSeriesData accepts multilpe links or names
-fx <- getSeriesData(series=fxInfo[["series_link"]]) # can also use fx[["series_name"]]
-```
-
-## Installation
-
-`valetr` has yet to be submitted to CRAN.
-
-To install the development version:
-
-``` r
-devtools::install_github("jdemello/valetr")
-```
+See Valet's [documentation](https://www.bankofcanada.ca/valet/docs) for an overview of the data structure.
 
 ## Functions
 
+`valetr` has three functions. Two functions help the user to explore series' and groups' labels whereas `getSeriesData()` performs the data extraction from the API:
 
 ```
 regexSeriesLabel  Matches a `pattern` to the label of one or more series.
@@ -94,5 +46,98 @@ getSeriesData     Extracts one or more series by specifying their name
                   allows the insertion of the API's query parameters.
 ```
 
+## Examples
+
+To reproduce the examples below, you need to have `data.table` and `ggplot2` ;&empbesides `valetr` of course. Also note that this vignette was created on `r Sys.Date()` and queries using the arguments `recent*` are referencing the date in which this vignette was created.
+
+
+### `getSeriesData()` in action
+
+Core CPI is an indicator of changes in food and energy prices only. Total CPI tracks the change of a fixed basket of goods and services purchased by Canadian consumers. Core CPI is expected to display higher volatility than Total CPI. However, Bank of Canada's Core CPI excludes some volatile items from the Core CPI's basket. Are these exclusions enough to make Core CPI less volatile than BoC's Total CPI? The Bank of Canada's inflation targetting regime looks at Total CPI when setting a target &emp;and establishing lower and upper bands. The Bank watches Total CPI fluctuates over time and it may decide to raise or cut the overnight rate if Total CPI is approaching its upper or lower band respectively. 
+
+Let's get both inflation measures for the last 20 years with `getSeriesData()`. The goal is to look at the CPIs' <strong>percentage change over a 12 month period</strong>. Note the query parameter `recent_years=21L` because there is a one-year loss to calculate the 12 month percentage variation. The reason to look at the 12 month percentage change in the inflation indicators is that the BoC's actions take longer to have an effect on the economy:
+
+```{r eval=TRUE, echo=TRUE, warning=FALSE, message=FALSE}
+cpis <- getSeriesData(series=c("V41690973","V41693242"), recent_years=21L) # get data
+
+# load data.table
+library(data.table)
+
+# calcule the CPI %
+cpis <- lapply(cpis, function(x){
+  # change last col name to cpi
+  names(x)[length(x)] <- "value"
+  x[["value"]] <- as.numeric(x[["value"]]) # cpi val as numeric
+  x[["d"]] <- format(as.Date(x[["d"]]), "%Y-%m") # format date
+  data.table::setDT(x)
+  # calculate % change over the past 12 mo
+  x[, chng := value/data.table::shift(value, n = 12) - 1]
+  # remove NAs (due to lag)
+  x <- x[!is.na(chng), ]
+  return(x)
+})
+
+# bind datasets
+cpis <- do.call(rbind, cpis)
+
+head(cpis)
+``` 
+
+Now that the series has been properly assembled, we use `ggplot2` to draw both series:
+
+```{r eval=TRUE, echo=TRUE, warning=FALSE, message=FALSE}
+# compare series
+library(ggplot2)
+ggplot(cpis,
+       aes(y=chng, x=d, group=series_label, colour=series_label)
+       ) + 
+  geom_line() + 
+  labs(x=NULL, 
+       y = "% change over the past 12 months",
+       title="Core CPI series appears less\nvolatile than Total CPI",
+       caption=paste0("Valet API series: ",
+                      paste0(unique(cpis[["series_name"]]),collapse =","))) + 
+  scale_y_continuous(labels=function(x) paste0(round(x*100, 2), "%")) + 
+  theme_minimal() + 
+  theme(axis.text.x = element_blank(), 
+        panel.grid = element_blank(), 
+        legend.title = element_blank(),
+        legend.position = c(.8,.85))
+```
+
+## Retrieve monetary aggregates
+
+Valet houses monetary aggregate data as well &emp;[M series](https://www.bankofcanada.ca/rates/indicators/key-variables/monetary-aggregates/). We use the function `regexSeriesLabel()` to search for the series: 
+
+```{r eval=TRUE, echo=TRUE, warning=FALSE, message=FALSE}
+# capture m aggregates 
+series <- regexSeriesLabel(pattern="(?i)m\\d\\+{1,} \\(gross\\)")
+```
+
+`regexSeriesLabel()` returns a `data.frame` with the series' label, link and name:
+
+```{r eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+# capture m aggregates 
+series
+```
+
+The resulting object `series` can then be used to retrieve the series' data using  `series[["name"]]`.
+
+## Retrieve series details with `getSeriesInfo()`
+
+The main difference between `regexSeriesLabel()` and `getSeriesInfo()` is that the latter can also search patterns in the series' group label via the `patternGroupLabel` argument. If `patternGroupLabel` is empty, `getSeriesInfo()` will pull all series information in the API which may take a few minutes. The other argument is `patternSeriesLabel` which is pattern-matching on the series labels &emp;same as `regexSeriesLabel()`. The idea of having a search on groups is that it allows the exploration of series' names given that the API houses thousands of series. For instance, one may not know beforehand the labels for the exchange rate series. Searching by group allows the user to interactively browse for series in an R session:
+
+```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+fxsInfo <- getSeriesInfo(patternGroupLabel = "exchange rate",
+                         ignore.case=TRUE)
+```
+
+This new series then allows the user to browse the many types of exchange rates:
+
+```{r eval=TRUE, echo=TRUE, message=FALSE,warning=FALSE}
+head(fxsInfo)
+```
+
+As seen above, the `data.frame` returned in `getSeriesInfo()` has six columns with the group name, label and description, and the series label, link and name. It is therefore a more complete picture compared to the one in `regexSeriesLabel()`.
 
 Read more about the API [here](https://www.bankofcanada.ca/valet/docs#valet_api).

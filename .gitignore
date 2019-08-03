@@ -3,3 +3,6 @@
 .RData
 .Ruserdata
 ^sandbox/
+gz$
+.Rbuildignore
+.gitignore
