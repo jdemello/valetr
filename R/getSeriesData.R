@@ -19,7 +19,7 @@
 #' \strong{\code{series}}
 #'
 #'     The argument \code{series} accepts a character vector in which each element is either
-#'     a series link or series name. \code{getSeriesData()} does not throw an error if some
+#'     a series link or a series name. \code{getSeriesData()} does not throw an error if some
 #'     components do not have a valid name or link in the API. Instead, \code{getSeriesData()}
 #'     issues a warning message with the series and API error message details. Additionally,
 #'     the final output removes elements without a valid link. If all components in
@@ -33,20 +33,30 @@
 #'    Only \code{start_date} and \code{end_date} can be jointly used in \code{...}. Using any
 #'    other combination of two or more arguments causes \code{getSeriesData()} to accept only
 #'    one of them according to a pre-established hierarchy. This argument hierarchy causes the function
-#'    to ignore the additional arguments. The hiearchy flows as follows: \code{start_date},
-#'    \code{end_date}, \code{recent}, \code{recent_weeks}, \code{recent_months},
-#'    \code{recent_years}; with the first two query arguments allowed to be used in conjunction. \code{recent}\strong{*} accepts both
-#'    numeric and character classes. If \code{recent}\strong{*} is an integer, the number is converted to character and then pieced
-#'    together with the other components to form the URL address request to the API. The series observations may have a frequency that
-#'    is not compatible to the query (i.e. recent_weeks query in a monthly series). Valet API converts the query time interval into the
-#'    corresponding frequency of the series. If the time interval component is less than the most recent observation in the series,
-#'    \code{getSeriesData()} will return a \code{data.frame} with a single row containing the series information. This behaviour allows
-#'    \code{getSeriesData()} to return some series for which there is a valid interval component in the query.
-#'    Also note that any additional arguments passed to \code{...} is ignored during execution.
+#'    to ignore the additional arguments. The hiearchy flows as follows:
+#'    \itemize{
+#'        \item{\code{start_date} and \code{end_date}}
+#'        \item{\code{recent}}
+#'        \item{\code{recent_weeks}}
+#'        \item{\code{recent_months}}
+#'        \item{\code{recent_years}}
+#'    }
+#'
+#'    The function converts numeric inputs to \code{recent}.
+#'
+#'    The series observations may have a frequency that is not compatible to the query
+#'    (i.e. recent_weeks query in a monthly series). Valet API converts the query time
+#'    interval into the corresponding frequency of the series. If the time interval component
+#'    is less than the most recent observation in the series, \code{getSeriesData()} returns
+#'    a \code{data.frame} with a single row containing the series information. This behaviour
+#'    allows \code{getSeriesData()} to return some series for which there is a valid interval.
+#'    Also note that any invalid arguments passed to \code{...} is ignored during execution.
 #'    For more details on the arguments' input format, see \strong{examples}, the package's
 #'    vignette and \href{https://www.bankofcanada.ca/valet/docs#observations_by_series}{Valet's documentation}.
 #'
 #' @examples
+#'
+#' \dontrun{
 #'
 #' ### step 1: find the series link or name
 #' # get series info
@@ -72,6 +82,7 @@
 #'
 #' # ex4: most recent years
 #' series <- getSeriesData(seriesInfo[["series_link"]], recent_years=20L)
+#' }
 
 getSeriesData <- function(series, ...){
 
