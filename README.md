@@ -1,20 +1,20 @@
 
 # valetr
 
-`valetr` provides an interface to the [Bank of Canada’s Valet
+`valetr` provides an interface to the [Bank of Canada’s ‘Valet’
 API](https://www.bankofcanada.ca/valet/docs) —read the API’s [terms and
 condtions](https://www.bankofcanada.ca/terms/). Some of the data
 available include key monetary policy variables —i.e. Total CPI and M
 aggregates.
 
-Valet also provides a route to Foreign Exchange Rates in RSS. This route
-returns the **most recent** foreign exchange rate —one observation only.
-This functionality is not included in `valetr`.
+‘Valet’ also provides a route to Foreign Exchange Rates in RSS. This
+route returns the **most recent** foreign exchange rate —one observation
+only. This functionality is not included in `valetr`.
 
 ## Retrieve key monetary policy variables
 
-The Valet API houses key monetary policy variables series. For instance,
-it is possible to extract the series for some measures of core
+The ‘Valet’ API houses key monetary policy variables series. For
+instance, it is possible to extract the series for some measures of core
 inflation:
 
 ``` r
