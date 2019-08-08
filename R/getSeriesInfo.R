@@ -25,7 +25,7 @@
 #' @examples
 #'
 #' # returns series info
-#' \dontrun{
+#' \donttest{
 #'
 #' seriesInfo <- getSeriesInfo(patternGroupLabel="(?i)consumer price",
 #'                             patternSeriesLabel="(?i)seasonally")

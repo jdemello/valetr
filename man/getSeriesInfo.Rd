@@ -39,7 +39,7 @@ also a series' group name, group label, group description and series name.
 \examples{
 
 # returns series info
-\dontrun{
+\donttest{
 
 seriesInfo <- getSeriesInfo(patternGroupLabel="(?i)consumer price",
                             patternSeriesLabel="(?i)seasonally")

@@ -56,7 +56,7 @@
 #'
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #'
 #' ### step 1: find the series link or name
 #' # get series info

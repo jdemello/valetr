@@ -64,7 +64,7 @@ function accepts query arguments as specified on the
 }
 \examples{
 
-\dontrun{
+\donttest{
 
 ### step 1: find the series link or name
 # get series info

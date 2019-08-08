@@ -13,8 +13,11 @@
 #' @examples
 #' # get a list of series that matches the pattern "CPI"
 #'
+#' \donttest{
+#' #'
 #' cpiList <- regexSeriesLabel(pattern="cpi") # no match, returns an empty data.frame
 #' cpiList2 <- regexSeriesLabel(pattern="cpi", ignore.case=TRUE) # finds match
+#' }
 
 regexSeriesLabel <- function(pattern=NULL,...){
   # initial argument validation ----
