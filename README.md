@@ -1,7 +1,7 @@
 
 # valetr
 
-The `valetr` provides an R interface to the [Bank of Canada’s Valet
+`valetr` provides an interface to the [Bank of Canada’s Valet
 API](https://www.bankofcanada.ca/valet/docs) —read the API’s [terms and
 condtions](https://www.bankofcanada.ca/terms/). Some of the data
 available include key monetary policy variables —i.e. Total CPI and M

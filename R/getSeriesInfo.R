@@ -41,7 +41,7 @@ getSeriesInfo <- function(patternGroupLabel=NULL,patternSeriesLabel=NULL,...){
   # access elipsis ----
   dots <- list(...)
 
-  # check if dots is empty
+  # check if dots are empty
   if(length(dots) != 0){
 
     dotnames <- names(dots)
