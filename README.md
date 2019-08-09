@@ -1,6 +1,9 @@
 
 # valetr
 
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/valetr)](https://CRAN.R-project.org/package=valetr)
+[![CRAC\_Downloads](https://cranlogs.r-pkg.org/badges/grand-total/valetr)](https://CRAN.R-project.org/package=valetr)
+
 `valetr` provides an interface to the [Bank of Canada’s ‘Valet’
 API](https://www.bankofcanada.ca/valet/docs) —read the API’s [terms and
 condtions](https://www.bankofcanada.ca/terms/). Some of the data
