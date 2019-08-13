@@ -61,9 +61,13 @@ fx <- getSeriesData(series=fxInfo[["series_link"]]) # can also use fx[["series_n
 
 ## Installation
 
-`valetr` has yet to be submitted to CRAN.
+`valetr` version 0.1.0 is now on CRAN:
 
-To install the development
+``` r
+install.packages("valetr")
+```
+
+You can also install the development
     version:
 
 ``` r
